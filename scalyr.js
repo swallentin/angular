@@ -589,8 +589,12 @@ defineScalyrAngularModule('slyRepeat', ['gatedScope'])
         var previousElementBuffer = [];
         
         var deregisterCallback = $scope.$watchCollection(collectionExpr, function(collection) {         
-          if (!isArray(collection))
-            throw Error("'collection' did not evaluate to an array.  expression was " + collectionExpr);
+          if (!isArray(collection)) {
+            return;
+            // @note: removed this exception in order to keep console clean. Root cause is unknown, but probably related to this code triggered before databinding.
+            // throw Error("'collection' did not evaluate to an array.  expression was " + collectionExpr);            
+          }
+
           var originalPreviousElementsLength = previousElements.length;
           // First, reconcile previousElements and collection with respect to the previousElementBuffer.
           // Basically, try to grow previousElements to collection.length if we can.
